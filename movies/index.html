@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="service.js"></script>
     <script src="utils.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <link
       rel="stylesheet"
@@ -9,7 +11,7 @@
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -27,9 +29,13 @@
       </div>
     </section>
     <div class="container">
-      <input />
-      <div id="target"></div>
+      <div id="autocomplete"></div>
+      <div id="autocomplete2"></div>
+      <div id="autocomplete3"></div>
+      <div id="summary"></div>
     </div>
+    <script src="dropdown.js"></script>
+    <script src="autocomplete.js"></script>
     <script src="index.js"></script>
   </body>
 </html>
