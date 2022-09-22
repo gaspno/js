@@ -1,66 +1,31 @@
-const onMovieSelect = async (movie) => {
-  const response = await axios.get("http://www.omdbapi.com", {
-    params: {
-      apikey: "13f022d",
-      i: movie.imdbID,
-    },
-  });
-  movieTemplate(response.data);
+const leftMovie = document.getElementById("left-autocomplete");
+const summary_left = document.getElementById("left-summary");
+const rightMovie = document.getElementById("right-autocomplete");
+const summary_right = document.getElementById("right-summary");
+
+const arguments = {
+  renderOption(movie) {
+    const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
+    return `<img src="${imgSrc}" /> 
+<h1>${movie.Title} <b>Year :(${movie.Year})<b/></h1>`;
+  },
+  onOptionSelect(baseUrl, movie, summary) {
+    onMovieSelect(baseUrl, movie, summary);
+  },
+  InputValue(movie) {
+    return movie.Title;
+  },
+  fetchDataMovie: fetchData,
 };
 
-const firstMovie = document.getElementById("autocomplete");
-const secondMovie = document.getElementById("autocomplete2");
-const thirdMovie = document.getElementById("autocomplete3");
-createAutoComplete({ root: firstMovie });
-createAutoComplete({ root: secondMovie });
-createAutoComplete({ root: thirdMovie });
+createAutoComplete({
+  root: leftMovie,
+  ...arguments,
+  summary: summary_left,
+});
 
-const movieTemplate = (movieDetail) => {
-  console.log(movieDetail);
-  const article = document.createElement("article");
-  const figure = document.createElement("figure");
-  const paragraph = document.createElement("p");
-  const img = document.createElement("img");
-  const divMediaContent = document.createElement("div");
-  const divContent = document.createElement("div");
-  const h1 = document.createElement("h1");
-  h1.innerHTML = movieDetail.Title;
-  const h4 = document.createElement("h4");
-  h4.innerHTML = movieDetail.Genre;
-  const paragraphContent = document.createElement("p");
-  paragraphContent.innerHTML = movieDetail.Plot;
-  img.src = movieDetail.Poster;
-  article.classList.add("media");
-  figure.classList.add("media-left");
-  paragraph.classList.add("image");
-  divMediaContent.classList.add("media-content");
-  divContent.classList.add("content");
-  paragraph.appendChild(img);
-  figure.appendChild(paragraph);
-  article.appendChild(figure);
-  divContent.appendChild(h1);
-  divContent.appendChild(h4);
-  divContent.appendChild(paragraphContent);
-  divMediaContent.appendChild(divContent);
-  article.appendChild(divMediaContent);
-  document.getElementById("summary").appendChild(article);
-  awardsDiv(movieDetail.Awards, "Awards");
-  awardsDiv(movieDetail.imdbRating, "IMDB Rating");
-  awardsDiv(movieDetail.BoxOffice, "Box Office");
-  awardsDiv(movieDetail.Metascore, "Metascore");
-  awardsDiv(movieDetail.imdbVotes, "IMDB Votes");
-};
-function awardsDiv(title, subtitle) {
-  const article = document.createElement("article");
-  article.classList.add("notification", "is-primary");
-  const paragraph = document.createElement("p");
-  paragraph.classList.add("title");
-  paragraph.innerHTML = title;
-  const paragraphSubtitle = document.createElement("p");
-  paragraphSubtitle.classList.add("subtitle");
-  paragraphSubtitle.innerHTML = subtitle;
-  article.appendChild(paragraph);
-  article.appendChild(paragraphSubtitle);
-
-  document.getElementById("summary").appendChild(article);
-}
+createAutoComplete({
+  root: rightMovie,
+  ...arguments,
+  summary: summary_right,
+});

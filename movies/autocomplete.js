@@ -1,4 +1,11 @@
-const createAutoComplete = ({ root }) => {
+const createAutoComplete = ({
+  root,
+  renderOption,
+  onOptionSelect,
+  InputValue,
+  fetchDataMovie,
+  summary,
+}) => {
   //
   const labelEl = document.createElement("label");
   labelEl.innerHTML = "<b>Search for a Movie</b>";
@@ -28,20 +35,21 @@ const createAutoComplete = ({ root }) => {
   const input = root.querySelector(".input");
 
   const onInput = async (e) => {
-    const movies = await fetchData(e.target.value);
-    if (!movies.length) {
+    const items = await fetchDataMovie(
+      "http://www.omdbapi.com",
+      e.target.value
+    );
+    if (!items.length) {
       dropdown.classList.remove("is-active");
       return;
     }
-    movies.forEach((movie) => {
+    items.forEach((movie) => {
       const option = document.createElement("a");
-      const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
-      option.innerHTML = `<img src="${imgSrc}" /> 
-      <h1>${movie.Title}</h1>`;
+      option.innerHTML = renderOption(movie);
       option.addEventListener("click", () => {
         dropdown.classList.remove("is-active");
-        input.value = movie.Title;
-        onMovieSelect(movie);
+        input.value = InputValue(movie);
+        onOptionSelect("http://www.omdbapi.com", movie, summary);
       });
       option.classList.add("dropdown-item");
       divMovies.appendChild(option);
