@@ -12,7 +12,6 @@ const debounce = (func, delay = 1000) => {
 
 //componentes
 const movieTemplate = (movieDetail, summary) => {
-  console.log(movieDetail);
   const article = document.createElement("article");
   const figure = document.createElement("figure");
   const paragraph = document.createElement("p");
@@ -40,14 +39,33 @@ const movieTemplate = (movieDetail, summary) => {
   divMediaContent.appendChild(divContent);
   article.appendChild(divMediaContent);
   summary.appendChild(article);
-  awardsDiv(movieDetail.Awards, "Awards", summary);
-  awardsDiv(movieDetail.imdbRating, "IMDB Rating", summary);
-  awardsDiv(movieDetail.BoxOffice, "Box Office", summary);
-  awardsDiv(movieDetail.Metascore, "Metascore", summary);
-  awardsDiv(movieDetail.imdbVotes, "IMDB Votes", summary);
+
+  const dollars = parseInt(
+    movieDetail.BoxOffice.replace(/\$/g, "").replace(/,/g, "")
+  );
+  const metascore = parseInt(movieDetail.Metascore);
+  const imdbRating = parseFloat(movieDetail.imdbRating);
+  const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ""));
+  const awards = movieDetail.Awards.split(" ").reduce((total, word) => {
+    const value = parseInt(word);
+    if (isNaN(value)) {
+      return total;
+    } else {
+      return total + value;
+    }
+  }, 0);
+
+  awardsDiv(movieDetail.Awards, "Awards", summary, awards);
+  awardsDiv(movieDetail.imdbRating, "IMDB Rating", summary, imdbRating);
+  awardsDiv(movieDetail.BoxOffice, "Box Office", summary, dollars);
+  awardsDiv(movieDetail.Metascore, "Metascore", summary, metascore);
+  awardsDiv(movieDetail.imdbVotes, "IMDB Votes", summary, imdbVotes);
 };
-function awardsDiv(title, subtitle, summary) {
+function awardsDiv(title, subtitle, summary, value) {
   const article = document.createElement("article");
+  const attribute = document.createAttribute("data-value");
+  attribute.value = value;
+  article.setAttributeNode(attribute);
   article.classList.add("notification", "is-primary");
   const paragraph = document.createElement("p");
   paragraph.classList.add("title");
@@ -57,6 +75,5 @@ function awardsDiv(title, subtitle, summary) {
   paragraphSubtitle.innerHTML = subtitle;
   article.appendChild(paragraph);
   article.appendChild(paragraphSubtitle);
-
   summary.appendChild(article);
 }

@@ -5,6 +5,7 @@ const createAutoComplete = ({
   InputValue,
   fetchDataMovie,
   summary,
+  side,
 }) => {
   //
   const labelEl = document.createElement("label");
@@ -49,7 +50,7 @@ const createAutoComplete = ({
       option.addEventListener("click", () => {
         dropdown.classList.remove("is-active");
         input.value = InputValue(movie);
-        onOptionSelect("http://www.omdbapi.com", movie, summary);
+        onOptionSelect("http://www.omdbapi.com", movie, summary, side);
       });
       option.classList.add("dropdown-item");
       divMovies.appendChild(option);
